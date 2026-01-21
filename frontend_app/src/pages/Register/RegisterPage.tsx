@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PageShell } from "../../components/PageShell/PageShell";
+import { Loader } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   registerRequested,
@@ -110,7 +111,7 @@ export function RegisterPage(): React.JSX.Element {
 
   return (
     <PageShell title="Register" subtitle="Create an account to get started.">
-      <form className={styles.form} onSubmit={onSubmit} noValidate>
+      <form className={styles.form} onSubmit={onSubmit} noValidate aria-busy={isLoading}>
         {errors.form ? (
           <div className={styles.formError} role="alert" aria-live="polite">
             {errors.form}
@@ -161,7 +162,13 @@ export function RegisterPage(): React.JSX.Element {
         </label>
 
         <button className={styles.button} type="submit" disabled={isLoading}>
-          {isLoading ? "Creating account..." : "Create account"}
+          {isLoading ? (
+            <>
+              <Loader variant="inline" label="Creating account" ariaLabel="Creating account" />
+            </>
+          ) : (
+            "Create account"
+          )}
         </button>
 
         <p className={styles.hint}>

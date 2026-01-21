@@ -1,0 +1,71 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 3px solid rgba(37, 99, 235, 0.18);
+  border-top-color: rgba(37, 99, 235, 0.95);
+  animation: spin 900ms linear infinite;
+  flex: 0 0 auto;
+}
+
+.label {
+  font-size: 13px;
+  color: rgba(17, 24, 39, 0.7);
+  font-weight: 600;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.fullScreenOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(17, 24, 39, 0.28);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+}
+
+.fullScreenPanel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 50px rgba(17, 24, 39, 0.22);
+}
+
+.fullScreenPanel .spinner {
+  width: 22px;
+  height: 22px;
+  border-width: 3px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

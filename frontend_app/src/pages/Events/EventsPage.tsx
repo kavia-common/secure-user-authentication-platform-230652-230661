@@ -21,7 +21,7 @@ const MOCK_EVENTS: EventItem[] = [
 // PUBLIC_INTERFACE
 export function EventsPage(): React.JSX.Element {
   /** Protected events page with mock data and a pagination placeholder. */
-  const [page] = useState(1);
+  const [page, setPage] = useState(1);
   const pageSize = 5;
 
   const pagedEvents = useMemo(() => {
@@ -40,7 +40,12 @@ export function EventsPage(): React.JSX.Element {
         ))}
       </ul>
 
-      <Pagination page={page} pageSize={pageSize} totalItems={MOCK_EVENTS.length} />
+      <Pagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={MOCK_EVENTS.length}
+        onPageChange={(next) => setPage(next)}
+      />
     </PageShell>
   );
 }

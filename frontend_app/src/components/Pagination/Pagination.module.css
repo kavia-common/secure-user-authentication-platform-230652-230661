@@ -5,8 +5,8 @@
   gap: 12px;
   padding: 12px;
   border-radius: 14px;
-  border: 1px dashed rgba(17, 24, 39, 0.2);
-  background: rgba(17, 24, 39, 0.02);
+  border: 1px solid rgba(17, 24, 39, 0.10);
+  background: rgba(255, 255, 255, 0.7);
   margin-top: 14px;
 }
 
@@ -19,6 +19,8 @@
   display: flex;
   gap: 8px;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .button {
@@ -27,16 +29,39 @@
   color: rgba(17, 24, 39, 0.85);
   border-radius: 12px;
   padding: 8px 10px;
-  font-weight: 700;
-  cursor: not-allowed;
-  opacity: 0.75;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, transform 120ms ease;
+}
+
+.button:hover {
+  background: rgba(37, 99, 235, 0.06);
+  border-color: rgba(37, 99, 235, 0.22);
+}
+
+.button:active {
+  transform: translateY(1px);
 }
 
 .button:disabled {
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
-.note {
-  font-size: 12px;
+.pageButton {
+  min-width: 40px;
+  text-align: center;
+}
+
+.active {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.35);
+  color: rgba(17, 24, 39, 0.95);
+}
+
+.ellipsis {
+  padding: 0 4px;
   color: rgba(17, 24, 39, 0.55);
+  font-size: 13px;
+  font-weight: 800;
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PageShell } from "../../components/PageShell/PageShell";
+import { Loader } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   loginRequested,
@@ -125,7 +126,7 @@ export function LoginPage(): React.JSX.Element {
 
   return (
     <PageShell title="Login" subtitle="Sign in to access your dashboard and events.">
-      <form className={styles.form} onSubmit={onSubmit} noValidate>
+      <form className={styles.form} onSubmit={onSubmit} noValidate aria-busy={isLoading}>
         {errors.form ? (
           <div className={styles.formError} role="alert" aria-live="polite">
             {errors.form}
@@ -176,7 +177,13 @@ export function LoginPage(): React.JSX.Element {
         </label>
 
         <button className={styles.button} type="submit" disabled={isLoading}>
-          {isLoading ? "Signing in..." : "Sign in"}
+          {isLoading ? (
+            <>
+              <Loader variant="inline" label="Signing in" ariaLabel="Signing in" />
+            </>
+          ) : (
+            "Sign in"
+          )}
         </button>
 
         <p className={styles.hint}>
