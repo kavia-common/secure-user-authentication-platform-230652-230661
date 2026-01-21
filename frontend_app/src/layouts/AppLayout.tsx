@@ -1,8 +1,7 @@
 import React from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { isAuthenticated, clearAuthToken } from "../auth/tokenStorage";
-import { useAppDispatch } from "../store/hooks";
-import { logoutRequested } from "../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { logoutRequested, selectAuthStatus } from "../features/auth/authSlice";
 import styles from "./AppLayout.module.css";
 
 export type AppLayoutProps = {
@@ -16,11 +15,11 @@ export function AppLayout({ title = "KAVIA App" }: AppLayoutProps): React.JSX.El
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // ProtectedRoute currently uses tokenStorage, so nav uses the same source of truth.
-  const authed = isAuthenticated();
+  const authStatus = useAppSelector(selectAuthStatus);
+  const authed = authStatus === "authenticated";
 
   const onLogout = () => {
-    clearAuthToken();
+    // Single source of truth: saga clears token storage; reducer resets auth state.
     dispatch(logoutRequested());
     navigate("/login", { replace: true });
   };

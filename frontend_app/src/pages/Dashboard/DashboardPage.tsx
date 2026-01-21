@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { PageShell } from "../../components/PageShell/PageShell";
-import { clearAuthToken } from "../../auth/tokenStorage";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   logoutRequested,
@@ -20,9 +19,7 @@ export function DashboardPage(): React.JSX.Element {
   const authStatus = useAppSelector(selectAuthStatus);
 
   const onLogout = () => {
-    // Keep legacy token cleanup (ProtectedRoute currently checks localStorage token).
-    clearAuthToken();
-    // Also reset redux auth state so UI updates immediately.
+    // Single source of truth: saga clears token storage; reducer resets auth state.
     dispatch(logoutRequested());
     navigate("/login", { replace: true });
   };
