@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { getAuthToken } from "../auth/tokenStorage";
 import { store } from "../store/store";
-import { logoutRequested } from "../features/auth/authSlice";
+import { logoutRequested, selectToken } from "../features/auth/authSlice";
 
 /**
  * Determine the API base URL from env vars.
@@ -39,7 +38,9 @@ export const apiClient: AxiosInstance = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const token = getAuthToken();
+    // IMPORTANT: Attach auth token from Redux state only.
+    // Token persistence/rehydration is handled by authSaga (tokenStorage is never read by components).
+    const token = selectToken(store.getState());
     if (token) {
       // Axios types allow headers to be undefined; normalize.
       config.headers = config.headers ?? {};

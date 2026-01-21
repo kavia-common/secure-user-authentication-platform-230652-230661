@@ -5,8 +5,10 @@ export function getAuthToken(): string | null {
   /**
    * Read the current auth token from localStorage.
    *
-   * This is a temporary placeholder implementation until Redux-based auth
-   * state is wired into the application.
+   * IMPORTANT:
+   * - Components and route guards must NOT read from tokenStorage directly.
+   * - Only sagas (rehydration/persistence side-effects) may use this module.
+   * - The rest of the app should rely on Redux auth state.
    *
    * @returns The token string if present, otherwise null.
    */
@@ -21,10 +23,10 @@ export function getAuthToken(): string | null {
 // PUBLIC_INTERFACE
 export function isAuthenticated(): boolean {
   /**
-   * Check whether the user is currently authenticated.
+   * Legacy helper (do not use in UI/routing).
    *
-   * For now, authentication is determined by presence of an auth token in
-   * localStorage.
+   * Authentication for UI/routing must be derived from Redux state instead.
+   * This remains only for backwards compatibility in non-React call sites (if any).
    */
   return Boolean(getAuthToken());
 }
