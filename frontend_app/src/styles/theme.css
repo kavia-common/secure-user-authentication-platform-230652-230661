@@ -1,0 +1,157 @@
+/* Ocean Professional Theme (centralized tokens + utilities)
+   - Primary: #2563EB
+   - Secondary/Success: #F59E0B
+   - Error: #EF4444
+   - Text: #111827
+   - Background: #f9fafb
+   - Surface: #ffffff
+   - Gradient feel: from-blue-500/10 to-gray-50
+*/
+
+:root {
+  /* Core colors */
+  --color-primary: #2563eb;
+  --color-secondary: #f59e0b;
+  --color-success: #f59e0b;
+  --color-error: #ef4444;
+
+  --color-text: #111827;
+  --color-text-muted: rgba(17, 24, 39, 0.68);
+
+  --color-bg: #f9fafb;
+  --color-surface: #ffffff;
+
+  /* Borders */
+  --color-border: rgba(17, 24, 39, 0.10);
+  --color-border-strong: rgba(17, 24, 39, 0.16);
+
+  /* Gradient */
+  --gradient-app: linear-gradient(135deg, rgba(37, 99, 235, 0.10), #f9fafb);
+
+  /* Typography */
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+
+  --tracking-tight: -0.02em;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  /* Radii */
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* Shadows */
+  --shadow-sm: 0 10px 24px rgba(17, 24, 39, 0.06);
+  --shadow-md: 0 18px 35px rgba(17, 24, 39, 0.08);
+  --shadow-lg: 0 30px 70px rgba(17, 24, 39, 0.18);
+
+  /* Transitions */
+  --transition-fast: 120ms ease;
+  --transition-base: 150ms ease;
+
+  /* Focus ring (accessible, high-contrast on light bg) */
+  --focus-ring: 0 0 0 4px rgba(37, 99, 235, 0.18);
+  --focus-outline: 2px solid rgba(37, 99, 235, 0.85);
+  --focus-outline-offset: 2px;
+}
+
+/* Global baseline */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Accessible default focus */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring);
+}
+
+/* Link + button baseline styles (so all pages feel consistent) */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-base), text-decoration-color var(--transition-base);
+}
+
+a:hover {
+  text-decoration: underline;
+  text-decoration-color: rgba(37, 99, 235, 0.55);
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Utilities (opt-in) */
+.u-surface {
+  background: var(--color-surface);
+}
+
+.u-bg {
+  background: var(--color-bg);
+}
+
+.u-gradient {
+  background: var(--gradient-app);
+}
+
+.u-border {
+  border: 1px solid var(--color-border);
+}
+
+.u-rounded-sm {
+  border-radius: var(--radius-sm);
+}
+
+.u-rounded-md {
+  border-radius: var(--radius-md);
+}
+
+.u-rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.u-shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.u-shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.u-shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.u-transition {
+  transition: background var(--transition-base), border-color var(--transition-base), color var(--transition-base),
+    box-shadow var(--transition-base), transform var(--transition-fast), filter var(--transition-fast),
+    opacity var(--transition-fast);
+}

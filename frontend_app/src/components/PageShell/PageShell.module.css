@@ -1,7 +1,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .header {
@@ -10,19 +10,23 @@
 
 .title {
   margin: 0;
-  font-size: 24px;
-  letter-spacing: -0.02em;
+  font-size: var(--text-2xl);
+  letter-spacing: var(--tracking-tight);
+  font-weight: 900;
+  color: var(--color-text);
 }
 
 .subtitle {
   margin: 6px 0 0 0;
-  color: rgba(17, 24, 39, 0.65);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  font-size: var(--text-sm);
 }
 
 .card {
-  background: #ffffff;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  border-radius: 14px;
-  box-shadow: 0 18px 35px rgba(17, 24, 39, 0.06);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   padding: 16px;
 }
