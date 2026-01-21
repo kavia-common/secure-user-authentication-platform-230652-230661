@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 /// <reference types="vite/client" />
+/// <reference types="vitest/globals" />
 
 interface ImportMetaEnv {
   readonly REACT_APP_API_BASE?: string;

@@ -16,14 +16,24 @@
     "start": "vite --host 0.0.0.0 --port 3000",
     "dev": "vite --host 0.0.0.0 --port 3000",
     "build": "tsc -b && vite build",
-    "preview": "vite preview --host 0.0.0.0 --port 3000"
+    "preview": "vite preview --host 0.0.0.0 --port 3000",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/ui": "^3.2.4",
     "cross-env": "^7.0.3",
+    "jsdom": "^26.1.0",
+    "redux-saga-test-plan": "^4.0.6",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12"
+    "vite": "^5.0.12",
+    "vitest": "^3.2.4"
   }
 }
