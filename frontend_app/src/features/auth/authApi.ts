@@ -42,7 +42,7 @@ export async function register(payload: RegisterRequest): Promise<AuthResponse> 
 export async function getMe(): Promise<{ user: AuthUser }> {
   /**
    * Call backend "me" endpoint. The Axios client attaches Authorization header
-   * via interceptor when a token is present in tokenStorage.
+   * via interceptor when a token is present in Redux auth state.
    */
   return apiGet<{ user: AuthUser }>("/auth/me");
 }
