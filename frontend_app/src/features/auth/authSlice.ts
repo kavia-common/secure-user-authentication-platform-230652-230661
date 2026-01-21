@@ -55,8 +55,6 @@ const authSlice = createSlice({
       state.error = undefined;
     },
     loadMeRequested(state) {
-      // If already authenticated, we still allow refresh; keep status as loading
-      // so UI can show a lightweight spinner if desired.
       state.status = "loading";
       state.error = undefined;
     },
@@ -65,6 +63,15 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.status = "idle";
+      state.error = undefined;
+    },
+
+    /**
+     * App-start rehydration trigger (saga reads tokenStorage and restores state).
+     */
+    authRehydrateRequested(state) {
+      // Keep as-is in reducer; saga will perform side effects and then set state.
+      // Do not flip status to loading here to avoid flashing spinners on cold start.
       state.error = undefined;
     },
 
@@ -97,6 +104,7 @@ export const {
   registerRequested,
   loadMeRequested,
   logoutRequested,
+  authRehydrateRequested,
   authSucceeded,
   meLoaded,
   authFailed
@@ -106,6 +114,12 @@ export const {
 export const selectAuthStatus = (state: RootState): AuthStatus => {
   /** Selector for auth status. */
   return state.auth.status;
+};
+
+// PUBLIC_INTERFACE
+export const selectIsAuthenticated = (state: RootState): boolean => {
+  /** Selector for whether the user is authenticated (Redux-only). */
+  return state.auth.status === "authenticated" && Boolean(state.auth.token);
 };
 
 // PUBLIC_INTERFACE

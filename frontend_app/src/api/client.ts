@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { clearAuthToken, getAuthToken } from "../auth/tokenStorage";
+import { getAuthToken } from "../auth/tokenStorage";
+import { store } from "../store/store";
+import { logoutRequested } from "../features/auth/authSlice";
 
 /**
  * Determine the API base URL from env vars.
@@ -18,24 +20,13 @@ function resolveApiBaseUrl(): string {
   return candidate ? String(candidate) : "";
 }
 
-/**
- * Best-effort redirect to login without importing router utilities (keeps api layer framework-agnostic).
- * Avoid redirect loops if already on /login.
- */
-function maybeRedirectToLogin(): void {
-  if (typeof window === "undefined") return;
-  const currentPath = window.location?.pathname ?? "";
-  if (currentPath.startsWith("/login")) return;
-  window.location.assign("/login");
-}
-
 const apiBaseURL = resolveApiBaseUrl();
 
 /**
  * A single shared Axios instance for the entire app.
  * - baseURL is configured from env vars
- * - auth token is attached automatically
- * - 401 clears token and redirects to /login
+ * - auth token is attached automatically (tokenStorage is used here, not in components)
+ * - 401 dispatches logoutRequested (saga clears token storage; router guards redirect)
  */
 export const apiClient: AxiosInstance = axios.create({
   baseURL: apiBaseURL,
@@ -52,7 +43,6 @@ apiClient.interceptors.request.use(
     if (token) {
       // Axios types allow headers to be undefined; normalize.
       config.headers = config.headers ?? {};
-      // Attach Bearer token
       (config.headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
     }
     return config;
@@ -66,11 +56,9 @@ apiClient.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === 401) {
-      // Token is invalid/expired: clear and force re-auth.
-      clearAuthToken();
-
-      // Optional redirect behavior requested.
-      maybeRedirectToLogin();
+      // Centralized 401 handling: force logout flow. Saga will clear tokenStorage.
+      // Route guards will redirect to /login as needed.
+      store.dispatch(logoutRequested());
     }
 
     return Promise.reject(error);
@@ -78,10 +66,7 @@ apiClient.interceptors.response.use(
 );
 
 // PUBLIC_INTERFACE
-export async function apiGet<TResponse>(
-  url: string,
-  config?: AxiosRequestConfig
-): Promise<TResponse> {
+export async function apiGet<TResponse>(url: string, config?: AxiosRequestConfig): Promise<TResponse> {
   /** Typed GET helper returning response.data. */
   const res: AxiosResponse<TResponse> = await apiClient.get<TResponse>(url, config);
   return res.data;
@@ -110,10 +95,7 @@ export async function apiPut<TResponse, TBody = unknown>(
 }
 
 // PUBLIC_INTERFACE
-export async function apiDelete<TResponse>(
-  url: string,
-  config?: AxiosRequestConfig
-): Promise<TResponse> {
+export async function apiDelete<TResponse>(url: string, config?: AxiosRequestConfig): Promise<TResponse> {
   /** Typed DELETE helper returning response.data. */
   const res: AxiosResponse<TResponse> = await apiClient.delete<TResponse>(url, config);
   return res.data;

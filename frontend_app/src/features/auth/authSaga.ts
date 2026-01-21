@@ -1,9 +1,10 @@
 import type { AxiosError } from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { clearAuthToken, setAuthToken } from "../../auth/tokenStorage";
+import { clearAuthToken, getAuthToken, setAuthToken } from "../../auth/tokenStorage";
 import { getMe, login, register } from "./authApi";
 import {
   authFailed,
+  authRehydrateRequested,
   authSucceeded,
   loadMeRequested,
   loginRequested,
@@ -26,6 +27,25 @@ function toErrorMessage(error: unknown): string {
 
 function isAxiosErrorWithStatus(error: unknown): error is AxiosError {
   return Boolean(error && typeof error === "object" && "isAxiosError" in error);
+}
+
+function* handleRehydrate(_action: ReturnType<typeof authRehydrateRequested>): Generator {
+  /**
+   * Read persisted token and restore Redux auth state.
+   * Components and routes must rely ONLY on Redux state.
+   */
+  try {
+    const token = getAuthToken();
+    if (!token) return;
+
+    // Set token in Redux immediately so ProtectedRoute can allow access while /me loads.
+    yield put(authSucceeded({ token, user: { id: "rehydrating", email: "" } }));
+
+    // Populate user data; if token is invalid, handleLoadMe logic will log out.
+    yield put(loadMeRequested());
+  } catch {
+    // If storage isn't available, just treat as logged out.
+  }
 }
 
 function* handleLogin(action: ReturnType<typeof loginRequested>): Generator {
@@ -57,8 +77,11 @@ function* handleLoadMe(_action: ReturnType<typeof loadMeRequested>): Generator {
   } catch (err) {
     // If unauthorized, clear token and reset auth state.
     if (isAxiosErrorWithStatus(err) && err.response?.status === 401) {
-      clearAuthToken();
-      // Reuse the existing logoutRequested reducer to clear user/token/status.
+      try {
+        clearAuthToken();
+      } catch {
+        // ignore
+      }
       yield put(logoutRequested());
       yield put(authFailed({ error: "Session expired. Please log in again." }));
       return;
@@ -80,6 +103,7 @@ function* handleLogout(_action: ReturnType<typeof logoutRequested>): Generator {
 // PUBLIC_INTERFACE
 export function* authSaga(): Generator {
   /** Auth feature root saga; registers watchers for auth flows. */
+  yield takeLatest(authRehydrateRequested.type, handleRehydrate);
   yield takeLatest(loginRequested.type, handleLogin);
   yield takeLatest(registerRequested.type, handleRegister);
   yield takeLatest(loadMeRequested.type, handleLoadMe);
