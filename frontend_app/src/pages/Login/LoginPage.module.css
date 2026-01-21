@@ -5,6 +5,16 @@
   max-width: 420px;
 }
 
+.formError {
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.08);
+  color: rgba(153, 27, 27, 0.95);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -23,11 +33,24 @@
   padding: 10px 12px;
   font-size: 14px;
   outline: none;
+  transition: box-shadow 150ms ease, border-color 150ms ease, background 150ms ease;
 }
 
 .input:focus {
   border-color: rgba(37, 99, 235, 0.6);
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.input:disabled {
+  background: rgba(17, 24, 39, 0.04);
+  color: rgba(17, 24, 39, 0.55);
+  cursor: not-allowed;
+}
+
+.fieldError {
+  font-size: 12px;
+  color: rgba(185, 28, 28, 0.95);
+  line-height: 1.35;
 }
 
 .button {
@@ -39,10 +62,20 @@
   color: #ffffff;
   font-weight: 700;
   cursor: pointer;
+  transition: transform 120ms ease, filter 120ms ease, opacity 120ms ease;
 }
 
 .button:hover {
   filter: brightness(0.98);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
 }
 
 .hint {
