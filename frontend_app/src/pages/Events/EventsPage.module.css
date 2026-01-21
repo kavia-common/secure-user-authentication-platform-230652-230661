@@ -1,0 +1,27 @@
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  background: #ffffff;
+}
+
+.itemTitle {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.itemMeta {
+  color: rgba(17, 24, 39, 0.6);
+  font-size: 13px;
+}

@@ -1,50 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { AppLayout } from "./layouts/AppLayout";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { LoginPage } from "./pages/Login/LoginPage";
+import { RegisterPage } from "./pages/Register/RegisterPage";
+import { DashboardPage } from "./pages/Dashboard/DashboardPage";
+import { EventsPage } from "./pages/Events/EventsPage";
 import "./App.css";
 
 // PUBLIC_INTERFACE
 function App(): React.JSX.Element {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  };
-
+  /** Application root component defining SPA routes and layout. */
   return (
     <div className="App">
-      <header className="App-header">
-        <button
-          className="theme-toggle"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-        >
-          {theme === "light" ? "🌙 Dark" : "☀️ Light"}
-        </button>
+      <Routes>
+        <Route element={<AppLayout title="KAVIA App" />}>
+          {/* Public routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-        <h1 style={{ margin: 0 }}>KAVIA App</h1>
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/events" element={<EventsPage />} />
+          </Route>
 
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-
-        <a
-          className="App-link"
-          href="https://react.dev"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+          {/* Default + fallback */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
